@@ -201,9 +201,6 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 		     lline < rfun && stabs[lline].n_type == N_PSYM;
 		     lline++)
 			info->eip_fn_narg++;
-	
-	stab_binsearch(stabs, &lline, &rline, N_SLINE, addr);
-	info->eip_line = lline > rline ? -1 : stabs[rline].n_desc;
 
 	return 0;
 }

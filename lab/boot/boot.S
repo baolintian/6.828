@@ -26,7 +26,7 @@ start:
   #   address line 20 is tied low, so that addresses higher than
   #   1MB wrap around to zero by default.  This code undoes this.
 seta20.1:
-  inb     $0x64,%al               # Wait for not busy, 从I/O端口0x64读取一个字节 # 显示$al读到了28
+  inb     $0x64,%al               # Wait for not busy
   testb   $0x2,%al
   jnz     seta20.1
 
@@ -45,15 +45,14 @@ seta20.2:
   # and segment translation that makes virtual addresses 
   # identical to their physical addresses, so that the 
   # effective memory map does not change during the switch.
-  # load gdt and 使cr0的最低位置为1
-  lgdt    gdtdesc                 # load gdt
+  lgdt    gdtdesc
   movl    %cr0, %eax
   orl     $CR0_PE_ON, %eax
   movl    %eax, %cr0
   
   # Jump to next instruction, but in 32-bit code segment.
   # Switches processor into 32-bit mode.
-  ljmp    $PROT_MODE_CSEG, $protcseg # code seg, code segment在gdt的第一段
+  ljmp    $PROT_MODE_CSEG, $protcseg
 
   .code32                     # Assemble for 32-bit mode
 protcseg:
@@ -73,12 +72,12 @@ protcseg:
 spin:
   jmp spin
 
-# Bootstrap GDT, global descriptor table
+# Bootstrap GDT
 .p2align 2                                # force 4 byte alignment
 gdt:
   SEG_NULL				# null seg
-  SEG(STA_X|STA_R, 0x0, 0xffffffff)	# code seg, execution/read
-  SEG(STA_W, 0x0, 0xffffffff)	        # data seg / write
+  SEG(STA_X|STA_R, 0x0, 0xffffffff)	# code seg
+  SEG(STA_W, 0x0, 0xffffffff)	        # data seg
 
 gdtdesc:
   .word   0x17                            # sizeof(gdt) - 1

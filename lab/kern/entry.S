@@ -52,14 +52,14 @@ entry:
 	# sufficient until we set up our real page table in mem_init
 	# in lab 2.
 
-	# Load the physical address of entry_pgdir into cr3.  entry_pgdir
+	# Load the physical address of entry_pgdir into cr3.  
 	# is defined in entrypgdir.c.
 	movl	$(RELOC(entry_pgdir)), %eax
 	movl	%eax, %cr3
 	# Turn on paging.
 	movl	%cr0, %eax
 	orl	$(CR0_PE|CR0_PG|CR0_WP), %eax
-	movl	%eax, %cr0			# see what happened.
+	movl	%eax, %cr0
 
 	# Now paging is enabled, but we're still running at a low EIP
 	# (why is this okay?).  Jump up above KERNBASE before entering
@@ -72,7 +72,6 @@ relocated:
 	# so that once we get into debugging C code,
 	# stack backtraces will be terminated properly.
 	movl	$0x0,%ebp			# nuke frame pointer
-								# exercise 11提示看这个文件内容，发现应该是这个地方暗示着栈的结束。
 
 	# Set the stack pointer
 	movl	$(bootstacktop),%esp

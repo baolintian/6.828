@@ -5,7 +5,6 @@
 
 typedef __builtin_va_list va_list;
 
-// 此部分在gcc中实现的
 #define va_start(ap, last) __builtin_va_start(ap, last)
 
 #define va_arg(ap, type) __builtin_va_arg(ap, type)

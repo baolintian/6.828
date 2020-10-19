@@ -29,10 +29,10 @@
 // page number field of address
 #define PGNUM(la)	(((uintptr_t) (la)) >> PTXSHIFT)
 
-// page directory index
+// page directory index，取page directory index
 #define PDX(la)		((((uintptr_t) (la)) >> PDXSHIFT) & 0x3FF)
 
-// page table index
+// page table index, 取page table index
 #define PTX(la)		((((uintptr_t) (la)) >> PTXSHIFT) & 0x3FF)
 
 // offset in page
@@ -72,7 +72,7 @@
 // Flags in PTE_SYSCALL may be used in system calls.  (Others may not.)
 #define PTE_SYSCALL	(PTE_AVAIL | PTE_P | PTE_W | PTE_U)
 
-// Address in page table or page directory entry
+// Address in page table or page directory entry, ~优先级高于&
 #define PTE_ADDR(pte)	((physaddr_t) (pte) & ~0xFFF)
 
 // Control Register flags

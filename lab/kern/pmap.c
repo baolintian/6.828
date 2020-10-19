@@ -183,6 +183,8 @@ mem_init(void)
 	//      (ie. perm = PTE_U | PTE_P)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
+	//映射是从头开始的，但是分配的时候是从尾部开始的，感觉很妙。
+	//这样的话，如果要做新的内存映射，那么必须尾部的page不能够用完
 	boot_map_region(kern_pgdir, UPAGES, PTSIZE, PADDR(pages), PTE_U);
 
 	//////////////////////////////////////////////////////////////////////
@@ -253,7 +255,7 @@ page_init(void)
 	// The example code here marks all physical pages as free.
 	// However this is not truly the case.  What memory is free?
 	//  1) Mark physical page 0 as in use.
-	//     This way we preserve the real-mode IDT and BIOS structures
+	//     This way we preserve the real-mode IDT (interrupt descriptor table)and BIOS structures
 	//     in case we ever need them.  (Currently we don't, but...)
 	//  2) The rest of base memory, [PGSIZE, npages_basemem * PGSIZE)
 	//     is free.
@@ -275,6 +277,7 @@ page_init(void)
 	//cprintf("now in use: %d\n", pages_in_use_end);
 	//设置让第0页为使用
 	cprintf("%08x %08x\n", pages, (uint32_t)boot_alloc(0));
+	//第0页用于存放real-mode IDT (interrupt descriptor table)and BIOS structures
 	pages[0].pp_ref = 1;
 	for (i = 1; i < npages_basemem; i++) {
 		pages[i].pp_ref = 0;
@@ -408,6 +411,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
     pte_t *pgtable_entry;
     for (offset = 0; offset < size; offset += PGSIZE, va += PGSIZE, pa += PGSIZE) {
         pgtable_entry = pgdir_walk(pgdir, (void *)va, 1);
+		//pgtable_entry中存着一条物理地址，指向一个page。这个page里面指向具体的所有虚拟地址与物理地址的映射。需要的大小位1024*4KB = 4MB就能管理全部的映射关系。
         *pgtable_entry = (pa | perm | PTE_P);
     }
 }
@@ -539,17 +543,18 @@ check_page_free_list(bool only_low_memory)
 		panic("'page_free_list' is a null pointer!");
 
 	if (only_low_memory) {
+		//原来的free_list一开始保存的是最高地址的页面，可以看page_init()那一部分的代码
 		// Move pages with lower addresses first in the free
 		// list, since entry_pgdir does not map all pages.
 		struct PageInfo *pp1, *pp2;
 		struct PageInfo **tp[2] = { &pp1, &pp2 };
 		for (pp = page_free_list; pp; pp = pp->pp_link) {
 			int pagetype = PDX(page2pa(pp)) >= pdx_limit;
-			*tp[pagetype] = pp;
-			tp[pagetype] = &pp->pp_link;
+			*tp[pagetype] = pp;//将指向的那个指针进行更新
+			tp[pagetype] = &pp->pp_link;//移动到新的指针点
 		}
-		*tp[1] = 0;
-		*tp[0] = pp2;
+		*tp[1] = 0;//定义尾部
+		*tp[0] = pp2;//低地址连接到高地址内存
 		page_free_list = pp1;
 	}
 
@@ -559,6 +564,7 @@ check_page_free_list(bool only_low_memory)
 		if (PDX(page2pa(pp)) < pdx_limit)
 			memset(page2kva(pp), 0x97, 128);
 
+	//又到了最开始的位置
 	first_free_page = (char *) boot_alloc(0);
 	for (pp = page_free_list; pp; pp = pp->pp_link) {
 		// check that we didn't corrupt the free list itself

@@ -30,7 +30,6 @@
  **********************************************************************/
 
 #define SECTSIZE	512
-//初始的1M中512KB存放代码和数据，后面的存放内核的镜像
 #define ELFHDR		((struct Elf *) 0x10000) // scratch space
 
 void readsect(void*, uint32_t);
@@ -42,7 +41,6 @@ bootmain(void)
 	struct Proghdr *ph, *eph;
 
 	// read 1st page off disk
-	//一页的大小是4096KB，所以是SECTSIZE*8
 	readseg((uint32_t) ELFHDR, SECTSIZE*8, 0);
 
 	// is this a valid ELF?
@@ -50,7 +48,6 @@ bootmain(void)
 		goto bad;
 
 	// load each program segment (ignores ph flags)
-	//e_phoff: ProgramHeaderTable offset
 	ph = (struct Proghdr *) ((uint8_t *) ELFHDR + ELFHDR->e_phoff);
 	eph = ph + ELFHDR->e_phnum;
 	for (; ph < eph; ph++)
