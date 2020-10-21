@@ -11,6 +11,7 @@ diskaddr(uint32_t blockno)
 }
 
 // Is this virtual address mapped?
+//为什么不要env_pgdir?
 bool
 va_is_mapped(void *va)
 {
@@ -59,6 +60,7 @@ bc_pgfault(struct UTrapframe *utf)
 	}
 	// Clear the dirty bit for the disk block page since we just read the
 	// block from disk
+	// 主要触发tlb_invalidate
 	if ((r = sys_page_map(0, addr, 0, addr, uvpt[PGNUM(addr)] & PTE_SYSCALL)) < 0)
 		panic("in bc_pgfault, sys_page_map: %e", r);
 
