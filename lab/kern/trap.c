@@ -234,12 +234,7 @@ trap_dispatch(struct Trapframe *tf)
 	// Handle clock interrupts. Don't forget to acknowledge the
 	// interrupt using lapic_eoi() before calling the scheduler!
 	// LAB 4: Your code here.
-	/*
-	if (tf->tf_trapno == IRQ_OFFSET + IRQ_TIMER) {
-		lapic_eoi();
-		sched_yield();
-	}
-	*/
+
 
 	//8259A的硬件中断是怎么触发的。
 	
@@ -249,7 +244,7 @@ trap_dispatch(struct Trapframe *tf)
 	// LAB 6: Your code here.
 	if(tf->tf_trapno == IRQ_OFFSET + IRQ_TIMER){
 		lapic_eoi();
-		time_tick();
+		//time_tick();
 		sched_yield();
 	}
 	

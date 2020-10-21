@@ -46,8 +46,8 @@ i386_init(void)
 	pic_init();
 
 	// Lab 6 hardware initialization functions
-	time_init();
-	pci_init();
+	//time_init();
+	//pci_init();
 	
 	// Acquire the big kernel lock before waking up APs
 	// Your code here:
@@ -60,26 +60,25 @@ i386_init(void)
 
 #if !defined(TEST_NO_NS)
 	// Start ns.
-	ENV_CREATE(net_ns, ENV_TYPE_NS);
+	//ENV_CREATE(net_ns, ENV_TYPE_NS);
 #endif
 
-	//ENV_CREATE(user_spawnhello, ENV_TYPE_USER);
 #if defined(TEST)
 	// Don't touch -- used by grading script!
 	ENV_CREATE(TEST, ENV_TYPE_USER);
 #else
 	// Touch all you want.
 	//执行这一行会卡死，所以暂时注释了
-	ENV_CREATE(user_icode, ENV_TYPE_USER);
+	//ENV_CREATE(user_icode, ENV_TYPE_USER);
 	
 	//ENV_CREATE(user_primes, ENV_TYPE_USER);
 	//ENV_CREATE(user_yield, ENV_TYPE_USER);
 	//ENV_CREATE(user_yield, ENV_TYPE_USER);
-	//ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_spawnhello, ENV_TYPE_USER);
 #endif // TEST*
 
 	// Should not be necessary - drains keyboard because interrupt has given up.
-	kbd_intr();
+	//kbd_intr();
 	// Schedule and run the first user environment!
 	sched_yield();
 }

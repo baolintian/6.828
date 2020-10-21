@@ -36,8 +36,8 @@ syscall(int num, int check, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 	//这里被注释了，因为是有报错的。。。
 	//if(check && ret > 0)
 		//panic("syscall %d returned %d (> 0)", num, ret);
-
-	//return ret;
+	//乱调的后果，lab6狂错
+	return ret;
 	return 0;
 }
 
