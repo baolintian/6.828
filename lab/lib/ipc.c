@@ -58,8 +58,10 @@ ipc_send(envid_t to_env, uint32_t val, void *pg, int perm)
 	
 	dstpg = pg != NULL ? pg : (void *)UTOP;
 	while((r = sys_ipc_try_send(to_env, val, dstpg, perm)) < 0) {
-		if (r != -E_IPC_NOT_RECV)
+		if (r != -E_IPC_NOT_RECV){
+			cprintf("what kind: %d\n", r);
 			panic("ipc_send: send message error %e", r);
+		}
 		sys_yield();
 	}
 	//panic("ipc_send not implemented");

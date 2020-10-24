@@ -6,6 +6,8 @@
 // PCI subsystem interface
 enum { pci_res_bus, pci_res_mem, pci_res_io, pci_res_max };
 
+
+
 struct pci_bus;
 
 struct pci_func {

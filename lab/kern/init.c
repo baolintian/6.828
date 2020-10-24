@@ -46,8 +46,8 @@ i386_init(void)
 	pic_init();
 
 	// Lab 6 hardware initialization functions
-	//time_init();
-	//pci_init();
+	time_init();
+	pci_init();
 	
 	// Acquire the big kernel lock before waking up APs
 	// Your code here:
@@ -60,7 +60,7 @@ i386_init(void)
 
 #if !defined(TEST_NO_NS)
 	// Start ns.
-	//ENV_CREATE(net_ns, ENV_TYPE_NS);
+	ENV_CREATE(net_ns, ENV_TYPE_NS);
 #endif
 
 #if defined(TEST)
@@ -78,7 +78,7 @@ i386_init(void)
 #endif // TEST*
 
 	// Should not be necessary - drains keyboard because interrupt has given up.
-	//kbd_intr();
+	kbd_intr();
 	// Schedule and run the first user environment!
 	sched_yield();
 }

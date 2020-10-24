@@ -36,15 +36,16 @@ void input(envid_t ns_envid)
     i = 0; 
     while(1) {
         while((length = sys_netpacket_recv((void*)((uintptr_t)cpkt + sizeof(cpkt->jp_len)), PGSIZE - sizeof(cpkt->jp_len))) < 0) {
-			cprintf("in len: %d\n", length);
+			//cprintf("in len: %d\n", length);
             sys_yield();
         }
-        cprintf("out len: %d\n", length);
+        //cprintf("out len: %d\n", length);
 
         cpkt->jp_len = length;
-        ipc_send(ns_envid, NSREQ_INPUT, cpkt, PTE_P | PTE_U);
+        ipc_send(ns_envid, NSREQ_INPUT, cpkt, PTE_P | PTE_U | PTE_W);
         i = (i + 1) % 10;
         cpkt = (struct jif_pkt*)((uintptr_t)pkt + i * PGSIZE);
         sys_yield();
     }
+    
 }

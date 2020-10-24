@@ -6,6 +6,7 @@
 #define DEFAULT "10.0.2.2"
 
 #define TIMER_INTERVAL 250
+#define RX_PACKET_SIZE 4096
 
 // Virtual address at which to receive page mappings containing client requests.
 #define QUEUE_SIZE	20
