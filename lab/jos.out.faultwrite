@@ -1,0 +1,74 @@
++ ld obj/kern/kernel
++ mk obj/kern/kernel.img
+6828 decimal is XXX octal!
+Physical memory: 131072K available, base = 640K, extended = 130432K
+kern_pgdir f0301000
+32768
+check_page_free_list() succeeded!
+check_page_alloc() succeeded!
+check_page() succeeded!
+check_kern_pgdir() succeeded!
+check_page_free_list() succeeded!
+check_page_installed_pgdir() succeeded!
+SMP: CPU 0 found 1 CPU(s)
+enabled interrupts: 1 2 4
+PCI: 00:00.0: 8086:1237: class: 6.0 (Bridge device) irq: 0
+PCI: 00:01.0: 8086:7000: class: 6.1 (Bridge device) irq: 0
+PCI: 00:01.1: 8086:7010: class: 1.1 (Storage controller) irq: 0
+PCI: 00:01.3: 8086:7113: class: 6.80 (Bridge device) irq: 9
+PCI: 00:02.0: 1234:1111: class: 3.0 (Display controller) irq: 0
+PCI: 00:03.0: 8086:100e: class: 2.0 (Network controller) irq: 11
+PCI function 00:03.0 (8086:100e) enabled
+e1000: bar0  febc0000 size0 20000
+e1000: mac address 5634:12005452
+e1000: status 80080783
+[00001002] user fault va 00000000 ip 00800036
+TRAP frame at 0xf03610f8 from CPU .
+  edi  0x00000000
+  esi  0x00000000
+  ebp  0xeebfdfd0
+  oesp 0xefffffdc
+  ebx  0x00000000
+  edx  0x00000000
+  ecx  0x00000000
+  eax  0xeec000f8
+  es   0x----0023
+  ds   0x----0023
+  trap 0x0000000e Page Fault
+  cr2  0x00000000
+  err  0x00000006 [user, write, not-present]
+  eip  0x00800036
+  cs   0x----001b
+  flag 0x00000282
+  esp  0xeebfdfd0
+  ss   0x----0023
+FS is running
+FS can do I/O
+Device 1 presence: 1
+block cache is good
+superblock is good
+bitmap is good
+ns: 52:54:00:12:34:56 bound to static IP 10.0.2.15
+NS: TCP/IP initialized.
+[00002002] user panic in ns_input at lib/ipc.c:63: ipc_send: send message error invalid parameter
+Welcome to the JOS kernel monitor!
+Type 'help' for a list of commands.
+TRAP frame at 0xf03610f8 from CPU .
+  edi  0x00001001
+  esi  0x0080fed3
+  ebp  0xeebfdf50
+  oesp 0xefffffdc
+  ebx  0xeebfdf64
+  edx  0xeebfde08
+  ecx  0x00000001
+  eax  0x00000001
+  es   0x----0023
+  ds   0x----0023
+  trap 0x00000003 Breakpoint
+  err  0x00000000
+  eip  0x0080e47a
+  cs   0x----001b
+  flag 0x00000286
+  esp  0xeebfdf48
+  ss   0x----0023
+qemu: terminating on signal 15 from pid 35968

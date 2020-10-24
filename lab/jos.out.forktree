@@ -1,0 +1,33 @@
++ ld obj/kern/kernel
++ mk obj/kern/kernel.img
+6828 decimal is XXX octal!
+Physical memory: 131072K available, base = 640K, extended = 130432K
+kern_pgdir f021b000
+32768
+check_page_free_list() succeeded!
+check_page_alloc() succeeded!
+check_page() succeeded!
+check_kern_pgdir() succeeded!
+check_page_free_list() succeeded!
+check_page_installed_pgdir() succeeded!
+SMP: CPU 0 found 1 CPU(s)
+enabled interrupts: 1 2 4
+1000: I am ''
+1001: I am '0'
+1003: I am '00'
+1005: I am '000'
+1002: I am '1'
+2001: I am '10'
+2000: I am '11'
+3001: I am '111'
+2002: I am '110'
+2003: I am '100'
+1004: I am '01'
+2005: I am '101'
+3002: I am '010'
+3003: I am '011'
+1006: I am '001'
+No runnable environments in the system!
+Welcome to the JOS kernel monitor!
+Type 'help' for a list of commands.
+qemu: terminating on signal 15 from pid 52963
