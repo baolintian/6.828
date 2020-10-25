@@ -56,6 +56,7 @@ bootmain(void)
 		// as the physical address)
 		//p_memsz是section占用的总大小，p_filesz是目前使用的大小
 		readseg(ph->p_pa, ph->p_memsz, ph->p_offset);
+		// 3L P169说了要初始化为0
 		for (i = 0; i < ph->p_memsz - ph->p_filesz; i++) {
 			*((char *) ph->p_pa + ph->p_filesz + i) = 0;
 		}
