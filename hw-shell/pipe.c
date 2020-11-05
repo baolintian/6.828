@@ -15,19 +15,17 @@ int main(){
     argv[0] = "wc";
     argv[1] = 0;
     pipe(p);
-    int r;
     if(fork() == 0) {
-        sleep(10);
         close(0);
-        dup(p[0]);
+        int temp = dup(p[0]);
         close(p[0]);
         close(p[1]);
         execv("/bin/wc", argv);
     } else {
         close(p[0]);
         write(p[1], "hello world\n", 12);
-        //close(p[1]);
-        wait(&r);
+        close(p[1]);
+        //wait(&r);
     }
 
     return 0;

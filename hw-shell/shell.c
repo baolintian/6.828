@@ -77,7 +77,7 @@ runcmd(struct cmd *cmd)
     }
     else{
         char path[20] = "/bin/"; //注意不能申明为指针类型，否则会访问不到
-        if(strcmp(ecmd->argv[0], "sort") == 0){
+        if(strcmp(ecmd->argv[0], "sort") == 0 || strcmp(ecmd->argv[0], "uniq") == 0 || strcmp(ecmd->argv[0], "wc") == 0){
             strcpy(path, "/usr/bin/");
         }
         strcat(path, ecmd->argv[0]);
@@ -116,14 +116,14 @@ runcmd(struct cmd *cmd)
     if (fork1() == 0) {
 		// left pipe
 		// standard output is redirected to write end of pipe
-		close(1);
+    close(1);
 		dup(p[1]);
         //printf("dup: %d->%d\n", p[1], test);
 		close(p[0]);
 		close(p[1]);
 		runcmd(pcmd->left);
 	}
-	wait(&r);
+	
 	
 	if (fork1() == 0) {
 		// standard input is redirected to read end of pipe
@@ -133,9 +133,12 @@ runcmd(struct cmd *cmd)
 		close(p[1]);
 		runcmd(pcmd->right);
 	}
-    wait(&r);
+  
 	close(p[0]);
 	close(p[1]);
+  //这里等待必须放到这里
+  wait(&r);
+  wait(&r);
 	
     break;
   }    
