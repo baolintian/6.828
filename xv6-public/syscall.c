@@ -166,7 +166,7 @@ syscall(void)
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
     // hw3 requirements.
-    cprintf("%s -> %d\n", syscall_name[num], num);
+    // cprintf("%s -> %d\n", syscall_name[num], num);
 
   } else {
     cprintf("%d %s: unknown sys call %d\n",
