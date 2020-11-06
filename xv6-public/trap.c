@@ -57,6 +57,18 @@ trap(struct trapframe *tf)
       release(&tickslock);
     }
     lapiceoi();
+    if(myproc() != 0 && (tf->cs & 3) == 3){
+      myproc()->ticks++;
+      if(myproc()->ticks == myproc()->alarmticks) {
+        myproc()->ticks = 0;
+        // 为什么不能像下面这样调用函数
+        //myproc()->alarmhandler();
+        tf->esp -= 4;
+        // eip压栈
+        *(uint *)(tf->esp) = tf->eip;
+        tf->eip = (uint)myproc()->alarmhandler;
+        }
+	  }
     break;
   case T_IRQ0 + IRQ_IDE:
     ideintr();
