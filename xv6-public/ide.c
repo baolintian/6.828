@@ -107,7 +107,7 @@ ideintr(void)
 
   // First queued buffer is the active request.
   acquire(&idelock);
-
+  //sti();
   if((b = idequeue) == 0){
     release(&idelock);
     return;
@@ -127,6 +127,7 @@ ideintr(void)
   if(idequeue != 0)
     idestart(idequeue);
 
+  //cli();
   release(&idelock);
 }
 
