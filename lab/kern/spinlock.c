@@ -102,9 +102,9 @@ spin_unlock(struct spinlock *lk)
 		}
 		panic("spin_unlock");
 	}
-
 	lk->pcs[0] = 0;
 	lk->cpu = 0;
+	
 #endif
 
 	// The xchg instruction is atomic (i.e. uses the "lock" prefix) with
@@ -114,4 +114,5 @@ spin_unlock(struct spinlock *lk)
 	// gcc will not reorder C statements across the xchg.
 	
 	xchg(&lk->locked, 0);
+	
 }

@@ -373,7 +373,7 @@ static uint
 bmap(struct inode *ip, uint bn)
 {
   uint addr, *a;
-  struct buf *bp;
+  struct buf *bp, *bp2;
 
   if(bn < NDIRECT){
     if((addr = ip->addrs[bn]) == 0)
@@ -395,7 +395,30 @@ bmap(struct inode *ip, uint bn)
     brelse(bp);
     return addr;
   }
-
+  //cprintf("in it %d\n", bn);
+  bn -= (NINDIRECT);
+  if(bn < NDINDIRECT){
+    if((addr = ip->addrs[NDIRECT+1]) == 0)
+        ip->addrs[NDIRECT+1] = addr = balloc(ip->dev);
+    bp = bread(ip->dev, addr);
+    a = (uint*)bp->data;
+    int page = bn/NINDIRECT;
+    int item = bn%NINDIRECT;
+    if((addr = a[page]) == 0){
+        a[page] = addr = balloc(ip->dev);
+        log_write(bp);
+    }
+    bp2 = bread(ip->dev, addr);
+    a = (uint*)bp2->data;
+    if((addr = a[item]) == 0){
+        a[item] = addr = balloc(ip->dev);
+        log_write(bp2);
+    }
+    brelse(bp);
+    brelse(bp2);
+    return addr;
+  }
+  
   panic("bmap: out of range");
 }
 
