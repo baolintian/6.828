@@ -66,6 +66,8 @@ trap(struct trapframe *tf)
         tf->esp -= 4;
         // eip压栈
         *(uint *)(tf->esp) = tf->eip;
+        cprintf("%x %x\n", (uint *)(tf->esp), tf->esp);
+        //(tf->esp) = tf->eip;
         tf->eip = (uint)myproc()->alarmhandler;
         }
 	  }
