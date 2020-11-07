@@ -47,7 +47,8 @@ handle_sigsegv(int sig, siginfo_t *si, void *ctx)
             strerror(errno));
     exit(EXIT_FAILURE);
   }
-  cur=(double*)align_down(fault_addr,page_size);
+  cur=(double*)(fault_addr & ~(sysconf(_SC_PAGE_SIZE) - 1));
+  //mmap中最后的一个参数和第一个参数必须是PAGE_SIZE的整数倍
   cur = mmap(cur, page_size , PROT_WRITE,
 	       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
   if (cur <0) {

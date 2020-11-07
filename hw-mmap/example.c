@@ -51,7 +51,7 @@ main(int argc, char *argv[])
                    MAP_PRIVATE, fd, pa_offset);
     if (addr == MAP_FAILED)
         handle_error("mmap");
-
+    close(fd);
     s = write(STDOUT_FILENO, addr + offset - pa_offset, length);
     if (s != length) {
         if (s == -1)
