@@ -129,24 +129,24 @@ write_head(void)
   brelse(buf);
 }
 
-// static void
-// recover_from_log(void)
-// {
-//   read_head();
-//   install_trans(); // if committed, copy from log to disk
-//   log.lh.n = 0;
-//   write_head(); // clear the log
-// }
-
 static void
 recover_from_log(void)
 {
-  read_head();      
-  cprintf("recovery: n=%d but ignoring\n", log.lh.n);
-  install_trans();
+  read_head();
+  install_trans(); // if committed, copy from log to disk
   log.lh.n = 0;
-  write_head();
+  write_head(); // clear the log
 }
+
+// static void
+// recover_from_log(void)
+// {
+//   read_head();      
+//   cprintf("recovery: n=%d but ignoring\n", log.lh.n);
+//   install_trans();
+//   log.lh.n = 0;
+//   write_head();
+// }
 
 // called at the start of each FS system call.
 void
