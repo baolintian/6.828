@@ -137,10 +137,12 @@ test_backtrace:
 	.section	.rodata.str1.1
 .LC3:
 	.string	"6828 decimal is %o octal!\n"
+.LC4:
+	.string	"x=%d y=%d"
 	.section	.text.unlikely
-.LCOLDB4:
+.LCOLDB5:
 	.text
-.LHOTB4:
+.LHOTB5:
 	.p2align 4,,15
 	.stabs	"i386_init:F(0,20)",36,0,0,i386_init
 	.globl	i386_init
@@ -169,19 +171,25 @@ i386_init:
 	call	cons_init
 	.stabn	68,0,36,.LM18-.LFBB2
 .LM18:
-	movl	$.LC3, %edi
 	movl	$6828, %esi
+	movl	$.LC3, %edi
 	xorl	%eax, %eax
 	call	cprintf
-	.stabn	68,0,39,.LM19-.LFBB2
+	.stabn	68,0,41,.LM19-.LFBB2
 .LM19:
+	movl	$.LC4, %edi
+	movl	$3, %esi
+	xorl	%eax, %eax
+	call	cprintf
+	.stabn	68,0,44,.LM20-.LFBB2
+.LM20:
 	movl	$5, %edi
 	call	test_backtrace
 	.p2align 4,,10
 	.p2align 3
 .L7:
-	.stabn	68,0,43,.LM20-.LFBB2
-.LM20:
+	.stabn	68,0,48,.LM21-.LFBB2
+.LM21:
 	xorl	%edi, %edi
 	call	monitor
 	jmp	.L7
@@ -189,19 +197,19 @@ i386_init:
 .LFE1:
 	.size	i386_init, .-i386_init
 	.section	.text.unlikely
-.LCOLDE4:
+.LCOLDE5:
 	.text
-.LHOTE4:
+.LHOTE5:
 .Lscope2:
 	.section	.rodata.str1.1
-.LC5:
-	.string	"kernel panic at %s:%d: "
 .LC6:
+	.string	"kernel panic at %s:%d: "
+.LC7:
 	.string	"\n"
 	.section	.text.unlikely
-.LCOLDB7:
+.LCOLDB8:
 	.text
-.LHOTB7:
+.LHOTB8:
 	.p2align 4,,15
 	.stabs	"_panic:F(0,20)",36,0,0,_panic
 	.stabs	"file:P(0,21)=*(0,2)",64,0,0,5
@@ -210,8 +218,8 @@ i386_init:
 	.globl	_panic
 	.type	_panic, @function
 _panic:
-	.stabn	68,0,59,.LM21-.LFBB3
-.LM21:
+	.stabn	68,0,64,.LM22-.LFBB3
+.LM22:
 .LFBB3:
 .LFB2:
 	.cfi_startproc
@@ -235,61 +243,61 @@ _panic:
 	movaps	%xmm6, 176(%rsp)
 	movaps	%xmm7, 192(%rsp)
 .L10:
-	.stabn	68,0,59,.LM22-.LFBB3
-.LM22:
+	.stabn	68,0,64,.LM23-.LFBB3
+.LM23:
 	movq	%fs:40, %rax
 	movq	%rax, 24(%rsp)
 	xorl	%eax, %eax
-	.stabn	68,0,62,.LM23-.LFBB3
-.LM23:
+	.stabn	68,0,67,.LM24-.LFBB3
+.LM24:
 	cmpq	$0, panicstr(%rip)
 	je	.L15
 	.p2align 4,,10
 	.p2align 3
 .L12:
-	.stabn	68,0,78,.LM24-.LFBB3
-.LM24:
+	.stabn	68,0,83,.LM25-.LFBB3
+.LM25:
 	xorl	%edi, %edi
 	call	monitor
 	jmp	.L12
 .L15:
-	.stabn	68,0,64,.LM25-.LFBB3
-.LM25:
-	movq	%rbx, panicstr(%rip)
-	.stabn	68,0,67,.LM26-.LFBB3
+	.stabn	68,0,69,.LM26-.LFBB3
 .LM26:
+	movq	%rbx, panicstr(%rip)
+	.stabn	68,0,72,.LM27-.LFBB3
+.LM27:
 #APP
-# 67 "kern/init.c" 1
+# 72 "kern/init.c" 1
 	cli; cld
 # 0 "" 2
-	.stabn	68,0,69,.LM27-.LFBB3
-.LM27:
+	.stabn	68,0,74,.LM28-.LFBB3
+.LM28:
 #NO_APP
 	leaq	224(%rsp), %rax
-	.stabn	68,0,70,.LM28-.LFBB3
-.LM28:
+	.stabn	68,0,75,.LM29-.LFBB3
+.LM29:
 	movl	%esi, %edx
 	movq	%rdi, %rsi
-	movl	$.LC5, %edi
-	.stabn	68,0,69,.LM29-.LFBB3
-.LM29:
+	movl	$.LC6, %edi
+	.stabn	68,0,74,.LM30-.LFBB3
+.LM30:
 	movl	$24, (%rsp)
 	movl	$48, 4(%rsp)
 	movq	%rax, 8(%rsp)
 	leaq	32(%rsp), %rax
 	movq	%rax, 16(%rsp)
-	.stabn	68,0,70,.LM30-.LFBB3
-.LM30:
+	.stabn	68,0,75,.LM31-.LFBB3
+.LM31:
 	xorl	%eax, %eax
 	call	cprintf
-	.stabn	68,0,71,.LM31-.LFBB3
-.LM31:
+	.stabn	68,0,76,.LM32-.LFBB3
+.LM32:
 	movq	%rbx, %rdi
 	movq	%rsp, %rsi
 	call	vcprintf
-	.stabn	68,0,72,.LM32-.LFBB3
-.LM32:
-	movl	$.LC6, %edi
+	.stabn	68,0,77,.LM33-.LFBB3
+.LM33:
+	movl	$.LC7, %edi
 	xorl	%eax, %eax
 	call	cprintf
 	jmp	.L12
@@ -297,20 +305,20 @@ _panic:
 .LFE2:
 	.size	_panic, .-_panic
 	.section	.text.unlikely
-.LCOLDE7:
+.LCOLDE8:
 	.text
-.LHOTE7:
+.LHOTE8:
 	.stabs	"ap:(2,1)",128,0,0,0
 	.stabn	192,0,0,.LFBB3-.LFBB3
 	.stabn	224,0,0,.Lscope3-.LFBB3
 .Lscope3:
 	.section	.rodata.str1.1
-.LC8:
+.LC9:
 	.string	"kernel warning at %s:%d: "
 	.section	.text.unlikely
-.LCOLDB9:
+.LCOLDB10:
 	.text
-.LHOTB9:
+.LHOTB10:
 	.p2align 4,,15
 	.stabs	"_warn:F(0,20)",36,0,0,_warn
 	.stabs	"file:P(0,21)",64,0,0,5
@@ -319,8 +327,8 @@ _panic:
 	.globl	_warn
 	.type	_warn, @function
 _warn:
-	.stabn	68,0,84,.LM33-.LFBB4
-.LM33:
+	.stabn	68,0,89,.LM34-.LFBB4
+.LM34:
 .LFBB4:
 .LFB3:
 	.cfi_startproc
@@ -344,42 +352,42 @@ _warn:
 	movaps	%xmm6, 176(%rsp)
 	movaps	%xmm7, 192(%rsp)
 .L17:
-	.stabn	68,0,84,.LM34-.LFBB4
-.LM34:
+	.stabn	68,0,89,.LM35-.LFBB4
+.LM35:
 	movq	%fs:40, %rax
 	movq	%rax, 24(%rsp)
 	xorl	%eax, %eax
-	.stabn	68,0,87,.LM35-.LFBB4
-.LM35:
-	leaq	224(%rsp), %rax
-	.stabn	68,0,88,.LM36-.LFBB4
+	.stabn	68,0,92,.LM36-.LFBB4
 .LM36:
+	leaq	224(%rsp), %rax
+	.stabn	68,0,93,.LM37-.LFBB4
+.LM37:
 	movl	%esi, %edx
 	movq	%rdi, %rsi
-	movl	$.LC8, %edi
-	.stabn	68,0,87,.LM37-.LFBB4
-.LM37:
+	movl	$.LC9, %edi
+	.stabn	68,0,92,.LM38-.LFBB4
+.LM38:
 	movq	%rax, 8(%rsp)
 	leaq	32(%rsp), %rax
 	movl	$24, (%rsp)
 	movl	$48, 4(%rsp)
 	movq	%rax, 16(%rsp)
-	.stabn	68,0,88,.LM38-.LFBB4
-.LM38:
+	.stabn	68,0,93,.LM39-.LFBB4
+.LM39:
 	xorl	%eax, %eax
 	call	cprintf
-	.stabn	68,0,89,.LM39-.LFBB4
-.LM39:
+	.stabn	68,0,94,.LM40-.LFBB4
+.LM40:
 	movq	%rsp, %rsi
 	movq	%rbx, %rdi
 	call	vcprintf
-	.stabn	68,0,90,.LM40-.LFBB4
-.LM40:
-	xorl	%eax, %eax
-	movl	$.LC6, %edi
-	call	cprintf
-	.stabn	68,0,92,.LM41-.LFBB4
+	.stabn	68,0,95,.LM41-.LFBB4
 .LM41:
+	xorl	%eax, %eax
+	movl	$.LC7, %edi
+	call	cprintf
+	.stabn	68,0,97,.LM42-.LFBB4
+.LM42:
 	movq	24(%rsp), %rax
 	xorq	%fs:40, %rax
 	jne	.L20
@@ -396,9 +404,9 @@ _warn:
 .LFE3:
 	.size	_warn, .-_warn
 	.section	.text.unlikely
-.LCOLDE9:
+.LCOLDE10:
 	.text
-.LHOTE9:
+.LHOTE10:
 	.stabs	"ap:(2,1)",128,0,0,0
 	.stabn	192,0,0,.LFBB4-.LFBB4
 	.stabn	224,0,0,.Lscope4-.LFBB4
