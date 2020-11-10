@@ -75,6 +75,7 @@ stab_binsearch(const struct Stab *stabs, int *region_left, int *region_right,
 		} else {
 			// exact match for 'addr', but continue loop to find
 			// *region_right
+			// 同地址的记录会有若干条，继续寻找。
 			*region_left = m;
 			l = m;
 			addr++;
@@ -85,11 +86,13 @@ stab_binsearch(const struct Stab *stabs, int *region_left, int *region_right,
 		*region_right = *region_left - 1;
 	else {
 		// find rightmost region containing 'addr'
+		
 		for (l = *region_right;
 		     l > *region_left && stabs[l].n_type != type;
 		     l--)
 			/* do nothing */;
 		*region_left = l;
+		//这个时候左区间是类型不同的，之后都是种类(type)相同，地址相同或者比其大。
 	}
 }
 
