@@ -83,7 +83,7 @@ static void check_page_installed_pgdir(void);
 // This function may ONLY be used during initialization,
 // before the page_free_list list has been set up.
 static void *
-boot_alloc(uint32_t n)
+	boot_alloc(uint32_t n)
 {
 	static char *nextfree;	// virtual address of next byte of free memory
 	char *result;
@@ -168,11 +168,19 @@ mem_init(void)
 	// particular, we can now map memory using boot_map_region
 	// or page_insert
 	page_init();
-
+	
+	//将内存从倒序改成了正序。
 	check_page_free_list(1);
+	cprintf("init %x\n", page_free_list);
 	check_page_alloc();
+	cprintf("init %x\n", page_free_list);
+
+	// part 2
 	check_page();
 
+
+
+	// part 3
 	//////////////////////////////////////////////////////////////////////
 	// Now we set up virtual memory
 
@@ -183,7 +191,8 @@ mem_init(void)
 	//      (ie. perm = PTE_U | PTE_P)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
-	//映射是从头开始的，但是分配的时候是从尾部开始的，感觉很妙。
+	//映射是从头开始的，但是分配的时候是从尾部开始的，感觉很妙。(错误！)
+	//并不是从尾部开始分配，中间有一个转换的过程。
 	//这样的话，如果要做新的内存映射，那么必须尾部的page不能够用完
 	boot_map_region(kern_pgdir, UPAGES, PTSIZE, PADDR(pages), PTE_U);
 
@@ -274,7 +283,7 @@ page_init(void)
 	const size_t pages_in_use_end =
 		npages_basemem + 96 + ((uint32_t)boot_alloc(0) - KERNBASE) / PGSIZE;
 	// pages_in_use_end = 600;
-	//cprintf("now in use: %d\n", pages_in_use_end);
+	cprintf("now in use: %d\n", pages_in_use_end);
 	//设置让第0页为使用
 	cprintf("%08x %08x\n", pages, (uint32_t)boot_alloc(0));
 	//第0页用于存放real-mode IDT (interrupt descriptor table)and BIOS structures
@@ -772,7 +781,9 @@ check_page(void)
 	assert(page_lookup(kern_pgdir, (void *) 0x0, &ptep) == NULL);
 
 	// there is no free memory, so we can't allocate a page table
-	assert(page_insert(kern_pgdir, pp1, 0x0, PTE_W) < 0);
+	int temp;
+	assert((temp = page_insert(kern_pgdir, pp1, 0x0, PTE_W)) < 0);
+	//cprintf("error type: %d\n", temp);
 
 	// free pp0 and try again: pp0 should be used for page table
 	page_free(pp0);
@@ -826,6 +837,7 @@ check_page(void)
 	assert(check_va2pa(kern_pgdir, 0) == page2pa(pp1));
 	assert(check_va2pa(kern_pgdir, PGSIZE) == page2pa(pp1));
 	// ... and ref counts should reflect this
+	cprintf("test: %x, %x\n", page2pa(pp1), page2pa(pp0));
 	assert(pp1->pp_ref == 2);
 	assert(pp2->pp_ref == 0);
 
