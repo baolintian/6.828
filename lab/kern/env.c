@@ -456,6 +456,18 @@ env_destroy(struct Env *e)
 //
 // This function does not return.
 //
+
+// 与trapentry.S中的操作顺序相反
+/*
+	pushl %ds
+    pushl %es
+    pushal
+    movw $GD_KD, %eax
+    movw %ax, %ds
+    movw %ax, %es
+    pushl %esp
+    call trap
+*/
 void
 env_pop_tf(struct Trapframe *tf)
 {

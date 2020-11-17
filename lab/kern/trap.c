@@ -58,6 +58,7 @@ static const char *trapname(int trapno)
 	return "(unknown trap)";
 }
 
+//这些函数的实现都在trapentry.S中实现。
 void handler_divide();
 void handler_debug();
 void handler_nmi();

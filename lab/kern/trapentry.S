@@ -47,6 +47,8 @@
  * Lab 3: Your code here for generating entry points for the different traps.
  */
 
+ //本部分是函数声明，并不是顺序执行的部分。
+
 TRAPHANDLER_NOEC(handler_divide,  T_DIVIDE)
 TRAPHANDLER_NOEC(handler_debug,   T_DEBUG)
 TRAPHANDLER_NOEC(handler_nmi,     T_NMI)
