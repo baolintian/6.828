@@ -601,6 +601,7 @@ mmio_map_region(physaddr_t pa, size_t size)
 	// beginning of the MMIO region.  Because this is static, its
 	// value will be preserved between calls to mmio_map_region
 	// (just like nextfree in boot_alloc).
+	// 这个static很关键啊，这样就不用保存为全局变量了。
 	static uintptr_t base = MMIOBASE;
 
 	// Reserve size bytes of virtual memory starting at base and
@@ -613,6 +614,8 @@ mmio_map_region(physaddr_t pa, size_t size)
 	// write-through) in addition to PTE_W.  (If you're interested
 	// in more details on this, see section 10.5 of IA32 volume
 	// 3A.)
+	// write through: 同时更新cache和后端的存储中的数据
+	// write back: 仅仅更新cache中的数据，必要时才往后端的设备写回数据
 	//
 	// Be sure to round size up to a multiple of PGSIZE and to
 	// handle if this reservation would overflow MMIOLIM (it's
