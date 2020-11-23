@@ -90,7 +90,7 @@ sys_exofork(void)
         return res;
     environment->env_status = ENV_NOT_RUNNABLE;
     environment->env_tf = curenv->env_tf;
-    environment->env_tf.tf_regs.reg_eax = 0;
+    environment->env_tf.tf_regs.reg_eax = 0;//这应该就是子进程的返回值了
     return environment->env_id;
 	//panic("sys_exofork not implemented");
 }

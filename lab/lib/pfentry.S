@@ -72,10 +72,14 @@ _pgfault_upcall:
 	// ways as registers become unavailable as scratch space.
 	//
 	// LAB 4: Your code here.
-	movl 0x28(%esp), %eax
-    subl $0x4, 0x30(%esp)
+	
+    subl $0x4, 0x30(%esp)//esp多一个4Bytes空间存返回值
     movl 0x30(%esp), %edx
-    movl %eax, (%edx)
+
+	movl 0x28(%esp), %eax
+    movl %eax, (%edx)//返回值那里填上eip
+
+
     addl $0x8, %esp
 
 

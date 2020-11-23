@@ -359,13 +359,13 @@ page_fault_handler(struct Trapframe *tf)
     if(curenv->env_pgfault_upcall){
         struct UTrapframe *utf;
         uintptr_t addr;         // addr of utf
-        if(UXSTACKTOP - PGSIZE <= tf->tf_esp && tf->tf_esp < UXSTACKTOP)
+        if(UXSTACKTOP - PGSIZE <= tf->tf_esp && tf->tf_esp < UXSTACKTOP)//嵌套情况
             addr = tf->tf_esp - sizeof(struct UTrapframe) - 4;
         else
             addr = UXSTACKTOP - sizeof(struct UTrapframe);
         user_mem_assert(curenv, (void *)addr, sizeof(struct UTrapframe), PTE_W);
         utf = (struct UTrapframe *)addr;
-        utf->utf_fault_va = fault_va;
+        utf->utf_fault_va = fault_va;//记录的是访问的内存虚拟地址，并不是EIP访问越界。
         utf->utf_err = tf->tf_err;
         utf->utf_regs = tf->tf_regs;
         utf->utf_eip = tf->tf_eip;
