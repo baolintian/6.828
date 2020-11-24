@@ -155,6 +155,8 @@ file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool all
        }
        if (!alloc && !f->f_indirect)
                return -E_NOT_FOUND;
+
+		//间接寻找
        if (!f->f_indirect) {
                if ((r = alloc_block()) < 0)
                        return -E_NO_DISK;
@@ -296,6 +298,7 @@ walk_path(const char *path, struct File **pdir, struct File **pf, char *lastelem
 		if (path - p >= MAXNAMELEN)
 			return -E_BAD_PATH;
 		memmove(name, p, path - p);
+		//得到一个/***/中间的名字
 		name[path - p] = '\0';
 		path = skip_slash(path);
 

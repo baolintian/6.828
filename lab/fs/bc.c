@@ -12,6 +12,8 @@ diskaddr(uint32_t blockno)
 
 // Is this virtual address mapped?
 //为什么不要env_pgdir?
+//因为只有文件系统进程才能进行检索，此时页目录和页表一定是指向这些地方的。
+
 bool
 va_is_mapped(void *va)
 {
@@ -49,7 +51,7 @@ bc_pgfault(struct UTrapframe *utf)
 	// the disk.
 	//
 	// LAB 5: you code here:
-	// envid 传入 0？ 在最初的哪个进程下 alloc 一个page ?
+	// envid 传入 0表示当前进程。
 	addr =(void *) ROUNDDOWN(addr, PGSIZE);
 	if ( (r = sys_page_alloc(0, addr, PTE_P|PTE_W|PTE_U)) < 0) {
 		panic("in bc_pgfault, sys_page_alloc: %e", r);
@@ -92,6 +94,9 @@ flush_block(void *addr)
 		
 		ide_write(blockno*BLKSECTS, addr , BLKSECTS);
 		int r;
+		// Clear the dirty bit for the disk block page since we just read the
+		// block from disk 
+		//下面的语句就是为了清空脏位
 		if ((r = sys_page_map(0, addr, 0, addr, uvpt[PGNUM(addr)] & PTE_SYSCALL)) < 0)
 			panic("in flush_block, sys_page_map: %e", r);
 	}

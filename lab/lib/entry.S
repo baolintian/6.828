@@ -11,7 +11,7 @@
 	.globl uvpt
 	.set uvpt, UVPT
 	.globl uvpd
-	.set uvpd, (UVPT+(UVPT>>12)*4)
+	.set uvpd, (UVPT+(UVPT>>12)*4) //为什么将uvpt设置（UVPT>>12）*4，因为这是要管理，判断是否读写的页面。
 
 
 // Entrypoint - this is where the kernel (or our parent environment)
