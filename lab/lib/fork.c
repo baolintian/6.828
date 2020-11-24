@@ -17,6 +17,7 @@ static void
 pgfault(struct UTrapframe *utf)
 {
 	void *addr = (void *) utf->utf_fault_va;
+	//cprintf("fault va = %x\n", utf->utf_fault_va);
 	uint32_t err = utf->utf_err;
 	int r;
 
@@ -42,6 +43,13 @@ pgfault(struct UTrapframe *utf)
 
     envid_t envid = sys_getenvid();
     addr = ROUNDDOWN(addr, PGSIZE);
+	// if(envid == 4097){
+	// 	//cprintf("%x\n", addr);
+	// 	int val = sys_page_map(4097, addr, 4097, addr, PTE_U | PTE_W | PTE_P);
+	// 	cprintf("return erro %d\n", val);
+	// 	return ;
+	// }
+	//cprintf("now allocating page: envid %d \n", envid);
     if(sys_page_alloc(envid, PFTEMP, PTE_U | PTE_W | PTE_P) < 0)
         panic("pgfault: sys_page_alloc failed.");
     memcpy(PFTEMP, addr, PGSIZE);

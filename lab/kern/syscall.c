@@ -218,7 +218,7 @@ sys_page_map(envid_t srcenvid, void *srcva,
 	// LAB 4: Your code here.
 	if((uint32_t)srcva >= UTOP || PGOFF(srcva) ||
             (uint32_t)dstva >= UTOP || PGOFF(dstva) ||
-            !(perm & PTE_U) || !(perm & PTE_U) ||
+            !(perm & PTE_U) ||
             (perm & (~PTE_SYSCALL)) )
         return -E_INVAL;
     struct Env *src_environemt, *dst_environment;
@@ -227,6 +227,8 @@ sys_page_map(envid_t srcenvid, void *srcva,
         return -E_BAD_ENV;
     pte_t *pte;
     struct PageInfo *page = page_lookup(src_environemt->env_pgdir, srcva, &pte);
+	// if(srcenvid == 4097)
+	// 	*pte |= PTE_W;
     if(!page || (!(*pte & PTE_W) && (perm & PTE_W)))
         return -E_INVAL;
     if(page_insert(dst_environment->env_pgdir, page, dstva, perm) < 0)
