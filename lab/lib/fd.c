@@ -150,11 +150,11 @@ close(int fdnum)
 {
 	struct Fd *fd;
 	int r;
-
 	if ((r = fd_lookup(fdnum, &fd)) < 0)
 		return r;
-	else
+	else{
 		return fd_close(fd, 1);
+	}
 }
 
 void

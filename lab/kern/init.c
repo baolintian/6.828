@@ -62,9 +62,9 @@ i386_init(void)
 	//kbd_intr();
 
 	//ENV_CREATE(user_primes, ENV_TYPE_USER);
-	ENV_CREATE(user_yield, ENV_TYPE_USER);
-	ENV_CREATE(user_yield, ENV_TYPE_USER);
-	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	//ENV_CREATE(user_yield, ENV_TYPE_USER);
+	//ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_testfile, ENV_TYPE_USER);
 #endif // TEST*
 
 	
