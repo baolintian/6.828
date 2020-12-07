@@ -164,8 +164,9 @@ file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool all
                memset(diskaddr(r), 0, BLKSIZE);
                flush_block(diskaddr(r));
        }
+	   //这里保存的是硬盘块号，有点不理解
        if (ppdiskbno)
-               *ppdiskbno = (uint32_t*)diskaddr(f->f_indirect) + filebno - NDIRECT;
+               *ppdiskbno = (uint32_t*)(diskaddr(f->f_indirect) + filebno - NDIRECT);
        return 0;
 }
 
