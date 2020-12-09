@@ -81,6 +81,7 @@ _pipeisclosed(struct Fd *fd, struct Pipe *p)
 		n = thisenv->env_runs;
 		ret = pageref(fd) == pageref(p);
 		nn = thisenv->env_runs;
+		//cprintf("n=%d, nn=%d, ret=%d\n", n, nn, ret);
 		if (n == nn)
 			return ret;
 		if (n != nn && ret == 1)

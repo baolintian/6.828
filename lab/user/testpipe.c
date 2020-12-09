@@ -31,7 +31,7 @@ umain(int argc, char **argv)
 		exit();
 	} else {
 		cprintf("[%08x] pipereadeof close %d\n", thisenv->env_id, p[0]);
-		close(p[0]);
+		//close(p[0]);
 		cprintf("[%08x] pipereadeof write %d\n", thisenv->env_id, p[1]);
 		if ((i = write(p[1], msg, strlen(msg))) != strlen(msg))
 			panic("write: %e", i);

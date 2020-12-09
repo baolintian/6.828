@@ -62,7 +62,7 @@ bc_pgfault(struct UTrapframe *utf)
 	}
 	// Clear the dirty bit for the disk block page since we just read the
 	// block from disk
-	// 主要触发tlb_invalidate
+	// 清除脏位
 	if ((r = sys_page_map(0, addr, 0, addr, uvpt[PGNUM(addr)] & PTE_SYSCALL)) < 0)
 		panic("in bc_pgfault, sys_page_map: %e", r);
 
